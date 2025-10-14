@@ -1,7 +1,6 @@
 from maistro.core.base_tool import BaseTool
 import requests
 from typing import Dict, Any
-from api.tools.config.tool_registry import tool_registry
 
 
 class ExchangeRateTool(BaseTool):
