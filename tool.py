@@ -11,6 +11,7 @@ class ExchangeRateTool(BaseTool):
         url = f"https://open.er-api.com/v6/latest/{base_currency.upper()}"
         resp = requests.get(url, timeout=10)
         data = resp.json()
+        print('')
 
         if resp.status_code != 200 or data.get("result") != "success":
             return "Döviz kuru bilgisi alınamadı."
