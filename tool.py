@@ -1,7 +1,7 @@
 from maistro.core.base_tool import BaseTool
 import requests
 from decouple import config
-import pandas
+import pandas as pd
 
 
 class ExchangeRateTool(BaseTool):
@@ -31,11 +31,20 @@ class ExchangeRateTool(BaseTool):
         if resp.status_code != 200 or data.get("result") != "success":
             return env_info + "Döviz kuru bilgisi alınamadı."
 
+        # Pandas test bloğu
+        df = pd.DataFrame(list(data.get("rates", {}).items()), columns=["Currency", "Rate"])
+        summary = df.head(5).to_string(index=False)
+
         target_rate = data.get("rates", {}).get(target_currency.upper())
         if not target_rate:
             return env_info + f"{target_currency.upper()} kuru bulunamadı."
-        print("ENV DEBUG:", config("HTTP_PROXY", default="none"), config("REQUESTS_CA_BUNDLE", default="none"))
-        return env_info + f"1 {base_currency.upper()} = {target_rate} {target_currency.upper()}"
+
+        return (
+            env_info
+            + f"1 {base_currency.upper()} = {target_rate} {target_currency.upper()}\n\n"
+            + "İlk 5 döviz kuru:\n"
+            + summary
+        )
 
     async def _arun(self, base_currency: str, target_currency: str) -> str:
         return self._run(base_currency, target_currency)
