@@ -2,6 +2,7 @@ from maistro.core.base_tool import BaseTool
 import requests
 from decouple import config
 import pandas as pd
+from mintlemon import SentenceSplitter
 
 
 class ExchangeRateTool(BaseTool):
@@ -34,6 +35,10 @@ class ExchangeRateTool(BaseTool):
         # Pandas test bloğu
         df = pd.DataFrame(list(data.get("rates", {}).items()), columns=["Currency", "Rate"])
         summary = df.head(5).to_string(index=False)
+
+        splitter = SentenceSplitter()
+        text = "Bu cümle bir örnektir. Bu cümle de bir örnektir!"
+        splitter.split_sentences(text)
 
         target_rate = data.get("rates", {}).get(target_currency.upper())
         if not target_rate:
