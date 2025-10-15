@@ -15,7 +15,7 @@ class ExchangeRateTool(BaseTool):
 
         # API isteği
         url = f"https://open.er-api.com/v6/latest/{base_currency.upper()}"
-        resp = requests.get(url, timeout=10)
+        resp = requests.get(url, timeout=10, verify=False)
         data = resp.json()
 
         # ENV bilgilerini tek blok olarak hazırla
@@ -33,7 +33,7 @@ class ExchangeRateTool(BaseTool):
         target_rate = data.get("rates", {}).get(target_currency.upper())
         if not target_rate:
             return env_info + f"{target_currency.upper()} kuru bulunamadı."
-
+        print("ENV DEBUG:", config("HTTP_PROXY", default="none"), config("REQUESTS_CA_BUNDLE", default="none"))
         return env_info + f"1 {base_currency.upper()} = {target_rate} {target_currency.upper()}"
 
     async def _arun(self, base_currency: str, target_currency: str) -> str:
