@@ -1,6 +1,7 @@
 from maistro.core.base_tool import BaseTool
 import requests
 from decouple import config
+import pandas
 
 
 class ExchangeRateTool(BaseTool):
